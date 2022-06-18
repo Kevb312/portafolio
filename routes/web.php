@@ -32,9 +32,9 @@ Route::get('users', 'UserController@index')->name('users');
  Route::get('admin', 'Admin\HomeController@index')->name('HomeControllerAdmin');
 
  /* 
- /////////////////////////
- ////Categorias
- /////////////////////////
+ |/////////////////////////
+ |////Categorias
+ |/////////////////////////
  */
 
  Route::get('getCategorias', 'Admin\CategoriesController@get')->name('getCategorias');
@@ -42,3 +42,13 @@ Route::get('users', 'UserController@index')->name('users');
  Route::post('setCategoria', 'Admin\CategoriesController@post')->name('setCategoria');
 
  Route::post('upCategoria', 'Admin\CategoriesController@put')->name('upCategoria');
+
+  /* 
+ |/////////////////////////
+ |////Post
+ |/////////////////////////
+ */
+
+ Route::get('getPosts', 'Admin\PostsController@get')->name('getPosts');
+
+ Route::post('setPost', 'Admin\PostsController@post')->name('setPost');

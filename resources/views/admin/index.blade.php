@@ -7,7 +7,7 @@
 @stop
 
 @section('content')
-    <p>Bienvenido administrador.</p>
+    <h4>Bienvenido, {{ auth()->user()->name }} </h4>   
 @stop
 
 @section('css')

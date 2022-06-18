@@ -1,15 +1,13 @@
 @extends('adminlte::page')
 
-@section('title', 'Dashboard')
+@section('title', 'Categorias')
 
 @section('content_header')
     <h1>Categorías</h1>
 @stop
 
 @section('content')
-    @if(isset($message))
-        <p>{{$message}}</p>
-    @endif
+
 
     <div class="card-body">
         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">

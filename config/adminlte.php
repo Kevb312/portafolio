@@ -264,7 +264,7 @@ return [
                 ],
                 [
                     'text' => 'Post',
-                    'url'  => '#',
+                    'route'  => 'getPosts',
                 ],
 
             ],
