@@ -52,3 +52,5 @@ Route::get('users', 'UserController@index')->name('users');
  Route::get('getPosts', 'Admin\PostsController@get')->name('getPosts');
 
  Route::post('setPost', 'Admin\PostsController@post')->name('setPost');
+
+ Route::post('putPost', 'Admin\PostsController@put')->name('putPost');

@@ -31,6 +31,7 @@
         <tbody>
             @foreach($posts as $post)
             <tr>
+                <input type="hidden" id="contentEdit{{$post->id}}" name="contentEdit{{$post->id}}" value="{!!$post->content!!}">
                 <td>{{$post->id}}</td>
                 <td id="namePost{{$post->id}}" value="{{$post->name}}">{{$post->title}}</td>
                 <td id="desPost{{$post->id}}" value="{{$post->brief}}">{{$post->brief}}</td>
@@ -133,7 +134,78 @@
             </div>
         </div>
     </div>
-    <!--Js -->
+
+
+    <!-- Modal Edit -->
+    <div class="modal fade" id="EditModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Editar categoría</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form method="post" action="{{route('putPost')}}" enctype="multipart/form-data">
+                    @csrf
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <input type="hidden" class="form-control" id="IDPosthidden" name="IDPosthidden" aria-describedby="emailHelp" value="">
+                            
+                            <label for="IDPost">ID post</label>
+                            <input type="text" class="form-control" id="IDPost" name="IDPost" aria-describedby="emailHelp" value="" disabled>
+                        </div>
+                        <div class="form-group">
+                            <label for="InputNameEdit">Titulo del post *</label>
+                            <input type="text" value="" class="form-control" id="InputNameEdit" name="InputNameEdit" aria-describedby="emailHelp" placeholder="Ingrese el nombre de la categoría">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="InputDesEdit">Breve descripción *</label>
+                            <input type="text" class="form-control" id="InputDesEdit" name="InputDesEdit" aria-describedby="emailHelp" placeholder="Ingrese una breve descripción" required value="">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="InputImage">Imagen*</label>
+                            <input type="file" class="form-control" id="InputImage" name="InputImage" >
+                        </div>
+
+                        <div class="form-group">
+                            <label for="InputContentEdit">Contenido*</label>
+                            <textarea class="form-control" name="InputContentEdit" id="editorEdit" rows="11" value="" required >
+                                
+                            </textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="InputEstado">Estado*</label>
+                            <select class="form-control" name="InputEstado" id="InputEstado">
+                                <option value="1">Publicado</option>
+                                <option value="0">No publicado</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="InputCategoria">Categoría*</label>
+
+                            <select class="form-control" name="InputCategoria" id="InputCategoria">
+                                @foreach($categorias as $categoria)
+                                <option value="{{$categoria->id}}">{{$categoria->name}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <input type="hidden" value="{{ auth()->user()->id }}" name="idUser">
+                    </div>
+                    
+                    
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Save changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 @stop
 
 @section('css')
@@ -144,14 +216,49 @@
 @stop
 
 @section('js')
-    <script src="https://cdn.ckeditor.com/ckeditor5/34.1.0/classic/ckeditor.js"></script>
+<script src="https://cdn.ckeditor.com/ckeditor5/34.1.0/classic/ckeditor.js"></script>
     <script>
-            ClassicEditor
+        ClassicEditor
         .create( document.querySelector( '#editor' ))
         .catch( error => {
             console.error( error );
         } );
     </script>
+
+    <script>
+        let YourEditor;
+        ClassicEditor
+        .create( document.querySelector( '#editorEdit' ))
+        .then(editor => {
+            window.editor = editor;
+            YourEditor = editor;
+        })
+        .catch( error => {
+            console.error( error );
+        } );
+    </script>
+
+    <!--Js -->
+   
+    <script type="text/javascript">
+        function recibir(id)
+        {
+            //Obtención de los datos
+            var name = document.getElementById("namePost"+id).innerHTML;
+            var des = document.getElementById("desPost"+id).innerHTML;
+            var content = document.getElementById("contentEdit"+id).value;
+            
+            //Asignación de los valores al formulario edit
+            document.getElementById("IDPosthidden").value = id;
+            document.getElementById("IDPost").value = id;
+            document.getElementById("InputNameEdit").value = name;
+            document.getElementById("InputDesEdit").value = des;
+
+            //Metodos del editor
+            YourEditor.setData(content);
+        } 
+    </script>
+
     <script> $(document).ready(function () {
         $('#example').DataTable();
     }); </>

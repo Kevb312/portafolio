@@ -52,8 +52,8 @@ class PostsController extends Controller
             $filename= date('YmdHi').$file->getClientOriginalName(); #Renombramos la imagen con la fecha como nombre
             $file-> move(public_path('public/img'), $filename); #Movemos la imagen
         }else{
-            dd("si");
-            #return redirect()->route('getPosts'); #Caso contrario redirigimos
+           
+            return redirect()->route('getPosts'); #Caso contrario redirigimos
         }
 
         Post::create([
@@ -66,5 +66,46 @@ class PostsController extends Controller
             'user_id' => $request->idUser
         ]);
         return redirect()->route('getPosts');
+    }
+
+    public function put(Request $request){
+        request()->validate([
+            'IDPosthidden' => 'required',
+            'InputNameEdit' => 'required',
+            'InputDesEdit' => 'required',
+            'InputContentEdit' => 'required',
+            'InputEstado' => 'required',
+            'InputCategoria' => 'required',
+            'idUser' => 'required',
+        ]);
+        
+        $oldNameImg = Post::select("image")->where("id", $request->IDPosthidden)->first();
+        
+        #Verificamos si hay una imagen cargada
+        if($request->file('InputImage')){
+            #definimos el path
+            $image_path = public_path('public/img/').$oldNameImg->image;
+            unlink($image_path); #borramos
+
+            $file= $request->file('InputImage'); #obtenemos la nueva imagen
+            $filename= date('YmdHi').$file->getClientOriginalName(); #Renombramos la imagen con la fecha como nombre
+            $file-> move(public_path('public/img'), $filename); #Movemos la imagen
+        }else{
+            
+            return redirect()->route('getPosts'); #Caso contrario redirigimos
+        }
+
+        Post::where("id", $request->IDPosthidden)
+        ->update([
+            'title' => $request->InputNameEdit,
+            'brief' => $request->InputDesEdit,
+            'content' => $request->InputContentEdit,
+            'image' => $filename,
+            'status' => $request->InputEstado,
+            'category_id' => $request->InputCategoria,
+        ]);
+
+        return redirect()->route('getPosts'); 
+        
     }
 }
