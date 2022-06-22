@@ -90,20 +90,29 @@ class PostsController extends Controller
             $file= $request->file('InputImage'); #obtenemos la nueva imagen
             $filename= date('YmdHi').$file->getClientOriginalName(); #Renombramos la imagen con la fecha como nombre
             $file-> move(public_path('public/img'), $filename); #Movemos la imagen
+
+            Post::where("id", $request->IDPosthidden)
+            ->update([
+                'title' => $request->InputNameEdit,
+                'brief' => $request->InputDesEdit,
+                'content' => $request->InputContentEdit,
+                'image' => $filename,
+                'status' => $request->InputEstado,
+                'category_id' => $request->InputCategoria,
+            ]);
         }else{
             
-            return redirect()->route('getPosts'); #Caso contrario redirigimos
+            Post::where("id", $request->IDPosthidden)
+            ->update([
+                'title' => $request->InputNameEdit,
+                'brief' => $request->InputDesEdit,
+                'content' => $request->InputContentEdit,
+                'status' => $request->InputEstado,
+                'category_id' => $request->InputCategoria,
+            ]);
         }
 
-        Post::where("id", $request->IDPosthidden)
-        ->update([
-            'title' => $request->InputNameEdit,
-            'brief' => $request->InputDesEdit,
-            'content' => $request->InputContentEdit,
-            'image' => $filename,
-            'status' => $request->InputEstado,
-            'category_id' => $request->InputCategoria,
-        ]);
+
 
         return redirect()->route('getPosts'); 
         

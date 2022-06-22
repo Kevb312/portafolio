@@ -14,13 +14,27 @@ use App\Http\Controllers\admin\HomeController;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+/*
+/////////////////////////
+| Rutas sin autentificación
+/////////////////////////
+|
+|
+ */
+
+Route::get('/', 'PublicoController@index')->name('home');
+
+Route::get('/about', 'PublicoController@about')->name('about');
+
+Route::get('/service', 'PublicoController@service')->name('service');
+
+Route::get('/blog', 'PublicoController@blog')->name('blog');
+
+Route::get('/blog/{id}', 'PublicoController@viewBlog')->name('viewBlog');
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
+#Route::get('/home', 'HomeController@index')->name('home');
 
 Route::get('users', 'UserController@index')->name('users');
 
